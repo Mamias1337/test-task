@@ -1,19 +1,24 @@
+import sys
 import math
 import os
 
-if os.path.isfile('points.txt'):
-    print('Файл points.txt существует.')
-else:
+if len(sys.argv) !=3:
+    print('Использование: python task2.py <center_and_rad.txt> <points.txt>')
+    sys.exit(1)
+
+
+if not os.path.isfile(sys.argv[2]):
     print('Файл points.txt не существует.')
+    sys.exit(1)
 
-if os.path.isfile('center and rad.txt'):
-    print('Файл center and rad.txt существует.')
-else:
-    print('Файл center and rad.txt не существует.')
+if not os.path.isfile(sys.argv[1]):
+    print('Файл center_and_rad.txt не существует.')
+    sys.exit(1)
 
-with open('center and rad.txt', 'r', encoding='utf-8') as f:
-    if os.stat('center and rad.txt').st_size == 0:
-        print('Файл center and rad.txt пустой.')
+with open(sys.argv[1], 'r', encoding='utf-8') as f:
+    if os.stat(sys.argv[1]).st_size == 0:
+        print(f'Файл {sys.argv[1]} пустой.')
+        sys.exit(1)
     else:
         center_line = f.readline().strip()
         radius_line = f.readline().strip()
@@ -21,18 +26,13 @@ with open('center and rad.txt', 'r', encoding='utf-8') as f:
         center = list(map(float, center_line.split()))
         radius = float(radius_line)
 
-if radius == int(radius):
-    print('Радиус является целым числом.')
-else:
-    print('Радиус не является целым числом.')
-    exit()
 
 
+with open(sys.argv[2], 'r', encoding='utf-8') as f:
 
-with open('points.txt', 'r', encoding='utf-8') as f:
-
-    if os.stat('points.txt').st_size == 0:
-        print('Файл points.txt пустой.')
+    if os.stat(sys.argv[2]).st_size == 0:
+        print(f'Файл {sys.argv[2]} пустой.')
+        sys.exit(1)
     else:
         point_list = []
 
@@ -45,18 +45,16 @@ with open('points.txt', 'r', encoding='utf-8') as f:
                 point_list.append(coord)
 
 
-if 1 <= len(point_list) <= 100:
-    print(f'Количество точек от 1 до 100: {len(point_list)}.')
-else:
+if not 1 <= len(point_list) <= 100:
     print(f'Количество точек вне диапазона 1-100, а именно: {len(point_list)}.')
-    exit()
+    sys.exit(1)
 
 
 for point in point_list:
     d = math.sqrt(math.pow(point[0] - center[0], 2) + math.pow(point[1] - center[1], 2))
     if d < radius:
-        print("1 - точка лежит внутри окружности.")
+        print(f"1 - точка [{point[0]};{point[1]}] лежит внутри окружности c центром в точках {center} и радиусом {radius}.")
     if d > radius:
-        print("2 - точка лежит вне окружности.")
+        print(f"2 - точка [{point[0]};{point[1]}] лежит вне окружности c центром в точках {center} и радиусом {radius}.")
     if d == radius:
-        print("0 - точка лежит на окружности.")
+        print(f"0 - точка [{point[0]};{point[1]}] лежит на окружности c центром в точках {center} и радиусом {radius}.")
